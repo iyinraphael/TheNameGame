@@ -23,8 +23,6 @@ class Network {
     
     internal func getProfiles(completion: @escaping  completionHandler) {
         
-
-        
         AF.request(endPointUrl).response { response in
             if let error = response.error {
                 NSLog("Error occured getting request\(error)")

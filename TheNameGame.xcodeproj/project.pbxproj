@@ -15,8 +15,9 @@
 		EBE79C682602EC93006A59B4 /* Network.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBE79C672602EC93006A59B4 /* Network.swift */; };
 		EBE79C6D2602EED7006A59B4 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = EBE79C6C2602EED7006A59B4 /* Alamofire */; };
 		EBE79C722602EFB7006A59B4 /* Profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBE79C712602EFB7006A59B4 /* Profile.swift */; };
-		EBE79C762602F639006A59B4 /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBE79C752602F639006A59B4 /* ViewModel.swift */; };
+		EBE79C762602F639006A59B4 /* MenuViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBE79C752602F639006A59B4 /* MenuViewModel.swift */; };
 		EBE79C7B2602F923006A59B4 /* BoxObservable.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBE79C7A2602F923006A59B4 /* BoxObservable.swift */; };
+		EBE79C7E26032D91006A59B4 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBE79C7D26032D91006A59B4 /* GameViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -29,8 +30,9 @@
 		EBE79C622602CFD9006A59B4 /* Appearance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Appearance.swift; sourceTree = "<group>"; };
 		EBE79C672602EC93006A59B4 /* Network.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Network.swift; sourceTree = "<group>"; };
 		EBE79C712602EFB7006A59B4 /* Profile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Profile.swift; sourceTree = "<group>"; };
-		EBE79C752602F639006A59B4 /* ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModel.swift; sourceTree = "<group>"; };
+		EBE79C752602F639006A59B4 /* MenuViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuViewModel.swift; sourceTree = "<group>"; };
 		EBE79C7A2602F923006A59B4 /* BoxObservable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoxObservable.swift; sourceTree = "<group>"; };
+		EBE79C7D26032D91006A59B4 /* GameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -97,6 +99,7 @@
 			isa = PBXGroup;
 			children = (
 				EB5D67EE2602CC08007DD1AC /* MenuViewController.swift */,
+				EBE79C7D26032D91006A59B4 /* GameViewController.swift */,
 			);
 			path = "View Controller";
 			sourceTree = "<group>";
@@ -129,7 +132,7 @@
 		EBE79C742602F61A006A59B4 /* View Model */ = {
 			isa = PBXGroup;
 			children = (
-				EBE79C752602F639006A59B4 /* ViewModel.swift */,
+				EBE79C752602F639006A59B4 /* MenuViewModel.swift */,
 			);
 			path = "View Model";
 			sourceTree = "<group>";
@@ -213,9 +216,10 @@
 				EBE79C722602EFB7006A59B4 /* Profile.swift in Sources */,
 				EB5D67D226029CDC007DD1AC /* AppDelegate.swift in Sources */,
 				EB5D67EF2602CC08007DD1AC /* MenuViewController.swift in Sources */,
+				EBE79C7E26032D91006A59B4 /* GameViewController.swift in Sources */,
 				EBE79C632602CFD9006A59B4 /* Appearance.swift in Sources */,
 				EBE79C7B2602F923006A59B4 /* BoxObservable.swift in Sources */,
-				EBE79C762602F639006A59B4 /* ViewModel.swift in Sources */,
+				EBE79C762602F639006A59B4 /* MenuViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
