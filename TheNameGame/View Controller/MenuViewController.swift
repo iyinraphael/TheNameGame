@@ -13,6 +13,7 @@ class MenuViewController: UIViewController {
     var backgroundImageView: UIImageView!
     var practiceModeButton: UIButton!
     var timedModeButton: UIButton!
+    var viewModel = ViewModel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
