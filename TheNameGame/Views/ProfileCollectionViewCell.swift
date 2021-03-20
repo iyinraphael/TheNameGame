@@ -20,7 +20,7 @@ class ProfileCollectionViewCell: UICollectionViewCell {
     
         profileImageView = UIImageView()
         profileImageView.translatesAutoresizingMaskIntoConstraints = false
-        profileImageView.contentMode = .scaleAspectFill
+        profileImageView.contentMode = .scaleAspectFit
         addSubview(profileImageView)
         
         NSLayoutConstraint.activate([

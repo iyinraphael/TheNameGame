@@ -16,7 +16,3 @@ struct Profile: Codable {
         let url: String?
     }
 }
-
-struct AllProfile: Codable {
-    let profile: Profile
-}

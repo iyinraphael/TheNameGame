@@ -17,13 +17,12 @@ enum NetworkError: Error {
 }
 
 class Network {
-    
-    let endPointUrl = "https://willowtreeapps.com/api/v1.0/profiles"
+    let endPoint = "https://willowtreeapps.com/api/v1.0/profiles"
     typealias completionHandler = (Result<[Profile], NetworkError>) -> Void
     
-    internal func getProfiles(completion: @escaping  completionHandler) {
+    func getProfiles(completion: @escaping  completionHandler) {
         
-        AF.request(endPointUrl).response { response in
+        AF.request(endPoint).response { response in
             if let error = response.error {
                 NSLog("Error occured getting request\(error)")
                 completion(.failure(.otherError))

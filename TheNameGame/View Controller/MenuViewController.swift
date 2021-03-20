@@ -13,14 +13,9 @@ class MenuViewController: UIViewController {
     var backgroundImageView: UIImageView!
     var practiceModeButton: UIButton!
     var timedModeButton: UIButton!
-    var viewModel = MenuViewModel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationController?.navigationBar.barTintColor = Appearance.backgroundColor
-        navigationController?.navigationBar.barStyle = .black
-        navigationController?.navigationBar.isTranslucent = false
-        navigationController?.navigationBar.shadowImage = UIImage()
         
         let width = view.frame.width
         let height = view.frame.height
@@ -74,12 +69,20 @@ class MenuViewController: UIViewController {
             timedModeButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -space),
             timedModeButton.heightAnchor.constraint(equalToConstant: space * 7),
             timedModeButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -42)
-            
         ])
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.navigationBar.barTintColor = Appearance.backgroundColor
+        navigationController?.navigationBar.barStyle = .black
+        navigationController?.navigationBar.isTranslucent = false
+        navigationController?.navigationBar.shadowImage = UIImage()
+    }
+    
     @objc func playPracticeMode() {
-        
+        let vc = GameViewController()
+        navigationController?.pushViewController(vc, animated: true)
     }
     
     @objc func playTimedMode() {
