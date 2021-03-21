@@ -7,21 +7,25 @@
 
 import UIKit
 
-class GameViewController: UIViewController {
-
+class GameViewController: UIViewController, GameiSCorrectDelegate {
     // MARK: - Properties
     private let reuseIdentifier = "cell"
     var viewModel = GameViewModel()
+    var attempCount = 0
+    var scoreCount = 0
+    var isCorrect: Bool?
+    weak var delegate: PlayModeDelegate?
+    
     
     // MARK: - Outlets
     var collectionView: UICollectionView!
     var fullNameLabel: UILabel!
-        
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
         navigationController?.navigationBar.barTintColor = .white
-    
+        navigationController?.navigationBar.tintColor = .black
         
         fullNameLabel = UILabel()
         fullNameLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -60,7 +64,10 @@ class GameViewController: UIViewController {
         viewModel.fullName.bind { [weak self] fullName in
             self?.fullNameLabel.text = fullName
         }
+        
+        
     }
+    
 }
 
     
@@ -79,6 +86,61 @@ extension GameViewController:UICollectionViewDelegate, UICollectionViewDataSourc
         return cell
 
     }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let profile = viewModel.filteredProfiles?[indexPath.item]
+        
+        if let cell = collectionView.cellForItem(at: indexPath) as? ProfileCollectionViewCell {
+            gamePlayMode(profile, cell)
+        }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didHighlightItemAt indexPath: IndexPath) {
+        
+    }
+    
+    
+    
+    // MARK: - Game Logic
+    private func gamePlayMode(_ profile: Profile?, _ cell: ProfileCollectionViewCell) {
+        attempCount += 1
+        
+        guard let profile = profile else { return }
+        let guessName = "\(profile.firstName) \(profile.lastName)"
+
+        switch delegate?.playmode {
+        
+        case .practiceMode:
+            if fullNameLabel.text != guessName {
+                isCorrect = false
+                cell.profile = profile
+                let alertController = UIAlertController(title: "Game Over",
+                                                        message: "\(scoreCount)/\(attempCount)",
+                                                        preferredStyle: .alert)
+                let action = UIAlertAction(title: "Ok", style: .cancel) { _ in
+                    self.navigationController?.popViewController(animated: true)
+                }
+                
+                alertController.addAction(action)
+                present(alertController, animated: true)
+                return
+            }
+            
+            isCorrect = true
+            cell.profile = profile
+            scoreCount += 1
+            viewModel.getRandomProfile()
+            collectionView.reloadData()
+            
+        case .timedMode:
+            if fullNameLabel.text != guessName {
+                
+            }
+        default:
+            fatalError()
+        }
+
+    }
 
 
 }
@@ -95,3 +157,6 @@ extension GameViewController: UICollectionViewDelegateFlowLayout {
         return CGSize(width: itemSize, height: itemSize)
     }
 }
+
+
+

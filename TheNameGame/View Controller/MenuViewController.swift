@@ -7,12 +7,23 @@
 
 import UIKit
 
-class MenuViewController: UIViewController {
+protocol PlayModeDelegate: class {
+    var playmode: PlayMode { get set }
+}
 
-    // MARK: - Properties
+enum PlayMode: String {
+    case none, practiceMode, timedMode
+}
+
+class MenuViewController: UIViewController, PlayModeDelegate {
+
+    // MARK: - Outlets
     var backgroundImageView: UIImageView!
     var practiceModeButton: UIButton!
     var timedModeButton: UIButton!
+    
+    // MARK: - Properties
+    var playmode = PlayMode.none
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -80,13 +91,22 @@ class MenuViewController: UIViewController {
         navigationController?.navigationBar.shadowImage = UIImage()
     }
     
+    // MARK: - Methods
     @objc func playPracticeMode() {
         let vc = GameViewController()
+        vc.title = "Pratice Mode"
+        vc.delegate = self
+        playmode = .practiceMode
         navigationController?.pushViewController(vc, animated: true)
     }
     
     @objc func playTimedMode() {
-        
+        let vc = GameViewController()
+        vc.title = "Timed Mode"
+        vc.delegate = self
+        playmode = .timedMode
+        navigationController?.pushViewController(vc, animated: true)
+       
     }
     
 
