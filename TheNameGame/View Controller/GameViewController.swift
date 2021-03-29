@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Kingfisher
 
 class GameViewController: UIViewController, GameiSCorrectDelegate {
     // MARK: - Properties
@@ -13,19 +14,32 @@ class GameViewController: UIViewController, GameiSCorrectDelegate {
     var viewModel = GameViewModel()
     var attempCount = 0
     var scoreCount = 0
-    var isCorrect: Bool?
+    var isCorrect: Bool = false
     weak var delegate: PlayModeDelegate?
+    var value: Double?
     
     
     // MARK: - Outlets
     var collectionView: UICollectionView!
     var fullNameLabel: UILabel!
+    var cellView: UIView!
+    var alertController: UIAlertController!
+    var progressCircularView: CircularProgressBar!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        progressCircularView = CircularProgressBar()
+        progressCircularView.translatesAutoresizingMaskIntoConstraints = false
+        progressCircularView.labelSize = 10
+        progressCircularView.lineWidth = 2
+        
         view.backgroundColor = .white
         navigationController?.navigationBar.barTintColor = .white
         navigationController?.navigationBar.tintColor = .black
+        navigationController?.navigationItem.rightBarButtonItem?.customView = progressCircularView
+        
+        cellView = UIView()
+        cellView.contentMode = .center
         
         fullNameLabel = UILabel()
         fullNameLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -42,30 +56,42 @@ class GameViewController: UIViewController, GameiSCorrectDelegate {
         
         view.addSubview(fullNameLabel)
         view.addSubview(collectionView)
+        view.addSubview(progressCircularView)
         
         NSLayoutConstraint.activate([
             fullNameLabel.topAnchor.constraint(equalTo: view.layoutMarginsGuide.topAnchor, constant: 30),
             fullNameLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            
+            progressCircularView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
+            progressCircularView.heightAnchor.constraint(equalToConstant: 30),
+            progressCircularView.widthAnchor.constraint(equalToConstant: 30),
             
             collectionView.topAnchor.constraint(equalTo: fullNameLabel.bottomAnchor),
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
-
+    
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
         viewModel.didFinishFetch = { [weak self] in
-            self?.collectionView.reloadData()
+            DispatchQueue.main.async {
+                self?.collectionView.reloadData()
+            }
         }
         
         viewModel.fullName.bind { [weak self] fullName in
             self?.fullNameLabel.text = fullName
         }
         
-        
+        if delegate?.playmode == .some(.timedMode) {
+            progressCircularView.setProgress(to: 1, withAnimation: true) {
+                    self.navigationController?.popViewController(animated: true)
+
+            }
+        }
     }
     
 }
@@ -81,67 +107,71 @@ extension GameViewController:UICollectionViewDelegate, UICollectionViewDataSourc
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as? ProfileCollectionViewCell else { return UICollectionViewCell() }
         let profile = viewModel.filteredProfiles?[indexPath.item]
-        cell.profileImageView.image = viewModel.getImage(from: profile?.headshot.url)
-
+        let url = viewModel.getUrl(from: profile?.headshot.url)
+        cell.profileImageView.kf.setImage(with: url)
+        
         return cell
 
     }
-    
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+
+    func collectionView(_ collectionView: UICollectionView, didHighlightItemAt indexPath: IndexPath) {
         let profile = viewModel.filteredProfiles?[indexPath.item]
-        
         if let cell = collectionView.cellForItem(at: indexPath) as? ProfileCollectionViewCell {
             gamePlayMode(profile, cell)
         }
     }
     
-    func collectionView(_ collectionView: UICollectionView, didHighlightItemAt indexPath: IndexPath) {
-        
-    }
-    
-    
-    
     // MARK: - Game Logic
     private func gamePlayMode(_ profile: Profile?, _ cell: ProfileCollectionViewCell) {
         attempCount += 1
-        
         guard let profile = profile else { return }
         let guessName = "\(profile.firstName) \(profile.lastName)"
-
+        
         switch delegate?.playmode {
         
         case .practiceMode:
             if fullNameLabel.text != guessName {
-                isCorrect = false
-                cell.profile = profile
-                let alertController = UIAlertController(title: "Game Over",
-                                                        message: "\(scoreCount)/\(attempCount)",
-                                                        preferredStyle: .alert)
-                let action = UIAlertAction(title: "Ok", style: .cancel) { _ in
-                    self.navigationController?.popViewController(animated: true)
-                }
+                cellView.layer.contents =  UIImage(named: "strikeMark")?.cgImage
+                cellView.backgroundColor = Appearance.strikeColor
+                showAlertView(with: "Game over", scoreCount, attempCount)
                 
-                alertController.addAction(action)
-                present(alertController, animated: true)
-                return
             }
-            
-            isCorrect = true
-            cell.profile = profile
             scoreCount += 1
-            viewModel.getRandomProfile()
-            collectionView.reloadData()
-            
+            cellView.layer.contents =  UIImage(named: "checkMark")?.cgImage
+            cellView.backgroundColor = Appearance.checkColor
+            showAlertView(with: "Correct", scoreCount, attempCount)
+        
+
         case .timedMode:
-            if fullNameLabel.text != guessName {
+            if fullNameLabel.text == guessName {
+                cellView.layer.contents =  UIImage(named: "checkMark")?.cgImage
+                cellView.backgroundColor = Appearance.checkColor
                 
+                let message = "\(scoreCount)/\(attempCount)"
+                alertController = UIAlertController(title: "Correct", message: message, preferredStyle: .alert)
+                let action = UIAlertAction(title: "Ok", style: .cancel)
+                alertController.addAction(action)
+                
+                present(alertController, animated: true) {
+//                    self.cellView.removeFromSuperview()
+                    self.viewModel.getRandomProfile()
+                }
             }
         default:
             fatalError()
         }
-
     }
-
+    
+    private func showAlertView(with title: String, _ score: Int, _ count: Int) {
+        let message = "\(score)/\(count)"
+        alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let action = UIAlertAction(title: "Ok", style: .cancel)
+        alertController.addAction(action)
+        
+        present(alertController, animated: true) {
+//            self.cellView.removeFromSuperview()
+        }
+    }
 
 }
 
@@ -157,6 +187,3 @@ extension GameViewController: UICollectionViewDelegateFlowLayout {
         return CGSize(width: itemSize, height: itemSize)
     }
 }
-
-
-

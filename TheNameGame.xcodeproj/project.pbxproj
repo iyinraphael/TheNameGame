@@ -19,6 +19,8 @@
 		EBE79C7E26032D91006A59B4 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBE79C7D26032D91006A59B4 /* GameViewController.swift */; };
 		EBE79C822603BE72006A59B4 /* ProfileCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBE79C812603BE72006A59B4 /* ProfileCollectionViewCell.swift */; };
 		EBE79C852603CA10006A59B4 /* GameViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBE79C842603CA10006A59B4 /* GameViewModel.swift */; };
+		EBE79CA02609225F006A59B4 /* CircularProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBE79C9F2609225F006A59B4 /* CircularProgressBar.swift */; };
+		EBE79CCB261167B9006A59B4 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = EBE79CCA261167B9006A59B4 /* Kingfisher */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -35,6 +37,7 @@
 		EBE79C7D26032D91006A59B4 /* GameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
 		EBE79C812603BE72006A59B4 /* ProfileCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCollectionViewCell.swift; sourceTree = "<group>"; };
 		EBE79C842603CA10006A59B4 /* GameViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewModel.swift; sourceTree = "<group>"; };
+		EBE79C9F2609225F006A59B4 /* CircularProgressBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircularProgressBar.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -42,6 +45,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EBE79CCB261167B9006A59B4 /* Kingfisher in Frameworks */,
 				EBE79C6D2602EED7006A59B4 /* Alamofire in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -94,6 +98,7 @@
 			children = (
 				EB5D67DC26029CDF007DD1AC /* LaunchScreen.storyboard */,
 				EBE79C812603BE72006A59B4 /* ProfileCollectionViewCell.swift */,
+				EBE79C9F2609225F006A59B4 /* CircularProgressBar.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -158,6 +163,7 @@
 			name = TheNameGame;
 			packageProductDependencies = (
 				EBE79C6C2602EED7006A59B4 /* Alamofire */,
+				EBE79CCA261167B9006A59B4 /* Kingfisher */,
 			);
 			productName = TheNameGame;
 			productReference = EB5D67CE26029CDC007DD1AC /* TheNameGame.app */;
@@ -188,6 +194,7 @@
 			mainGroup = EB5D67C526029CDC007DD1AC;
 			packageReferences = (
 				EBE79C6B2602EED7006A59B4 /* XCRemoteSwiftPackageReference "Alamofire" */,
+				EBE79CC9261167B8006A59B4 /* XCRemoteSwiftPackageReference "Kingfisher" */,
 			);
 			productRefGroup = EB5D67CF26029CDC007DD1AC /* Products */;
 			projectDirPath = "";
@@ -224,6 +231,7 @@
 				EBE79C632602CFD9006A59B4 /* Appearance.swift in Sources */,
 				EBE79C7B2602F923006A59B4 /* BoxObservable.swift in Sources */,
 				EBE79C852603CA10006A59B4 /* GameViewModel.swift in Sources */,
+				EBE79CA02609225F006A59B4 /* CircularProgressBar.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -427,6 +435,14 @@
 				minimumVersion = 5.4.1;
 			};
 		};
+		EBE79CC9261167B8006A59B4 /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/onevcat/Kingfisher.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 6.2.1;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -434,6 +450,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = EBE79C6B2602EED7006A59B4 /* XCRemoteSwiftPackageReference "Alamofire" */;
 			productName = Alamofire;
+		};
+		EBE79CCA261167B9006A59B4 /* Kingfisher */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = EBE79CC9261167B8006A59B4 /* XCRemoteSwiftPackageReference "Kingfisher" */;
+			productName = Kingfisher;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

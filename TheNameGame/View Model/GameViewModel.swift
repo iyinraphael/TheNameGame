@@ -18,7 +18,6 @@ class GameViewModel {
     var filteredProfiles: [Profile]?{
         didSet{
             self.didFinishFetch?()
-            self.setUpName()
         }
     }
     // MARK: - Closures for callback
@@ -52,23 +51,18 @@ class GameViewModel {
             }
         }
         filteredProfiles = tempProfiles
-    }
-    
-    private func setUpName() {
         guard let profiles = filteredProfiles else { return }
         randomIndex = Range(0...5).randomElement() ?? 0
         let name = profiles[randomIndex]
         self.fullName.value = "\(name.firstName) \(name.lastName)"
     }
     
-    func getImage(from imageString: String?) -> UIImage {
+    func getUrl(from imageString: String?) -> URL? {
         guard let imageWithString = imageString,
-              let imageURL = URL(string: "https:\(imageWithString)"),
-              let data = try? Data(contentsOf: imageURL),
-              let image = UIImage(data: data) else
-        { return UIImage()}
+              let imageURL = URL(string: "https:\(imageWithString)")
+        else { return nil}
         
-        return image
+        return imageURL
     }
     
 }

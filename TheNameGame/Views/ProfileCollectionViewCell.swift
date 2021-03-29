@@ -8,7 +8,7 @@
 import UIKit
 
 protocol GameiSCorrectDelegate: class {
-    var isCorrect: Bool? { get set}
+    var isCorrect: Bool { get set}
 }
 
 class ProfileCollectionViewCell: UICollectionViewCell {
@@ -17,12 +17,7 @@ class ProfileCollectionViewCell: UICollectionViewCell {
     var profileImageView: UIImageView!
     var strikeLayer: CALayer!
     weak var delegate: GameiSCorrectDelegate?
-    
-    var profile: Profile? {
-        didSet {
-            self.addSubLayer()
-        }
-    }
+
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -30,33 +25,20 @@ class ProfileCollectionViewCell: UICollectionViewCell {
     
         profileImageView = UIImageView()
         profileImageView.translatesAutoresizingMaskIntoConstraints = false
-        profileImageView.contentMode = .scaleAspectFit
+        profileImageView.contentMode = .scaleAspectFill
+        profileImageView.clipsToBounds = true
         addSubview(profileImageView)
+        sendSubviewToBack(profileImageView)
         
         NSLayoutConstraint.activate([
+            profileImageView.topAnchor.constraint(equalTo: topAnchor),
             profileImageView.leadingAnchor.constraint(equalTo: leadingAnchor),
             profileImageView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            profileImageView.widthAnchor.constraint(equalTo: widthAnchor),
-            profileImageView.heightAnchor.constraint(equalTo: widthAnchor)
+            profileImageView.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-    
-    func addSubLayer() {
-        strikeLayer = CALayer()
-        strikeLayer.frame = contentView.bounds
-        strikeLayer.contentsGravity = .center
-
-        strikeLayer.contents = delegate?.isCorrect == true ?
-                                UIImage(named: "checkMark")?.cgImage :
-            UIImage(named: "strikeMark")?.cgImage
-        strikeLayer.backgroundColor = delegate?.isCorrect == true ?
-                                    Appearance.checkColor :
-                                    Appearance.strikeColor
-
-        layer.addSublayer(strikeLayer)
     }
 }

@@ -106,7 +106,6 @@ class MenuViewController: UIViewController, PlayModeDelegate {
         vc.delegate = self
         playmode = .timedMode
         navigationController?.pushViewController(vc, animated: true)
-       
     }
     
 
