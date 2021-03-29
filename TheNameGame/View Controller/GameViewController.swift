@@ -88,8 +88,8 @@ class GameViewController: UIViewController, GameiSCorrectDelegate {
         
         if delegate?.playmode == .some(.timedMode) {
             progressCircularView.setProgress(to: 1, withAnimation: true) {
-                    self.navigationController?.popViewController(animated: true)
-
+                self.gameOverAlertView(with: self.scoreCount, self.attempCount)
+                self.alertController.removeFromParent()
             }
         }
     }
@@ -117,6 +117,7 @@ extension GameViewController:UICollectionViewDelegate, UICollectionViewDataSourc
     func collectionView(_ collectionView: UICollectionView, didHighlightItemAt indexPath: IndexPath) {
         let profile = viewModel.filteredProfiles?[indexPath.item]
         if let cell = collectionView.cellForItem(at: indexPath) as? ProfileCollectionViewCell {
+            cell.delegate = self
             gamePlayMode(profile, cell)
         }
     }
@@ -124,6 +125,7 @@ extension GameViewController:UICollectionViewDelegate, UICollectionViewDataSourc
     // MARK: - Game Logic
     private func gamePlayMode(_ profile: Profile?, _ cell: ProfileCollectionViewCell) {
         attempCount += 1
+        
         guard let profile = profile else { return }
         let guessName = "\(profile.firstName) \(profile.lastName)"
         
@@ -131,46 +133,57 @@ extension GameViewController:UICollectionViewDelegate, UICollectionViewDataSourc
         
         case .practiceMode:
             if fullNameLabel.text != guessName {
-                cellView.layer.contents =  UIImage(named: "strikeMark")?.cgImage
-                cellView.backgroundColor = Appearance.strikeColor
-                showAlertView(with: "Game over", scoreCount, attempCount)
+                isCorrect = false
+                cell.profile = profile
                 
+                gameOverAlertView(with: scoreCount, attempCount)
+                alertController.removeFromParent()
             }
             scoreCount += 1
-            cellView.layer.contents =  UIImage(named: "checkMark")?.cgImage
-            cellView.backgroundColor = Appearance.checkColor
-            showAlertView(with: "Correct", scoreCount, attempCount)
+            isCorrect = true
+            cell.profile = profile
+            
+            correctAnswerAlertView()
+            alertController.removeFromParent()
         
-
         case .timedMode:
-            if fullNameLabel.text == guessName {
-                cellView.layer.contents =  UIImage(named: "checkMark")?.cgImage
-                cellView.backgroundColor = Appearance.checkColor
-                
-                let message = "\(scoreCount)/\(attempCount)"
-                alertController = UIAlertController(title: "Correct", message: message, preferredStyle: .alert)
-                let action = UIAlertAction(title: "Ok", style: .cancel)
-                alertController.addAction(action)
-                
-                present(alertController, animated: true) {
-//                    self.cellView.removeFromSuperview()
-                    self.viewModel.getRandomProfile()
-                }
+            if fullNameLabel.text != guessName {
+                isCorrect = false
+                cell.profile = profile
+                return
             }
+            scoreCount += 1
+            isCorrect = true
+            cell.profile = profile
+            
+            correctAnswerAlertView()
+            alertController.removeFromParent()
+       
         default:
             fatalError()
         }
+        
+    }
+
+    
+    private func gameOverAlertView(with score: Int, _ count: Int) {
+        let message = "\(score)/\(count)"
+        
+        alertController = UIAlertController(title: "Game Over", message: message, preferredStyle: .alert)
+        let action = UIAlertAction(title: "Ok", style: .cancel) { [weak self] _ in
+            self?.navigationController?.popViewController(animated: true)
+        }
+        alertController.addAction(action)
+        present(alertController, animated: true)
     }
     
-    private func showAlertView(with title: String, _ score: Int, _ count: Int) {
-        let message = "\(score)/\(count)"
-        alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        let action = UIAlertAction(title: "Ok", style: .cancel)
-        alertController.addAction(action)
-        
-        present(alertController, animated: true) {
-//            self.cellView.removeFromSuperview()
+    private func correctAnswerAlertView() {
+        alertController = UIAlertController(title: "Correct", message:"Keep going!", preferredStyle: .alert)
+        let action = UIAlertAction(title: "Ok", style: .cancel) { [weak self] _ in
+            self?.viewModel.getRandomProfile()
         }
+        alertController.addAction(action)
+        present(alertController, animated: true)
     }
 
 }
