@@ -11,6 +11,9 @@
 		EB5D67DB26029CDF007DD1AC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EB5D67DA26029CDF007DD1AC /* Assets.xcassets */; };
 		EB5D67DE26029CDF007DD1AC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EB5D67DC26029CDF007DD1AC /* LaunchScreen.storyboard */; };
 		EB5D67EF2602CC08007DD1AC /* MenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB5D67EE2602CC08007DD1AC /* MenuViewController.swift */; };
+		EB91801B2617CA810073B22E /* Cache.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB91801A2617CA810073B22E /* Cache.swift */; };
+		EB91801F2617CAC80073B22E /* ConcorrencyOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB91801E2617CAC80073B22E /* ConcorrencyOperation.swift */; };
+		EB9180222617CAEC0073B22E /* FetchImageOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9180212617CAEC0073B22E /* FetchImageOperation.swift */; };
 		EBE79C632602CFD9006A59B4 /* Appearance.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBE79C622602CFD9006A59B4 /* Appearance.swift */; };
 		EBE79C682602EC93006A59B4 /* Network.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBE79C672602EC93006A59B4 /* Network.swift */; };
 		EBE79C6D2602EED7006A59B4 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = EBE79C6C2602EED7006A59B4 /* Alamofire */; };
@@ -29,6 +32,9 @@
 		EB5D67DD26029CDF007DD1AC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		EB5D67DF26029CDF007DD1AC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		EB5D67EE2602CC08007DD1AC /* MenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuViewController.swift; sourceTree = "<group>"; };
+		EB91801A2617CA810073B22E /* Cache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cache.swift; sourceTree = "<group>"; };
+		EB91801E2617CAC80073B22E /* ConcorrencyOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConcorrencyOperation.swift; sourceTree = "<group>"; };
+		EB9180212617CAEC0073B22E /* FetchImageOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchImageOperation.swift; sourceTree = "<group>"; };
 		EBE79C622602CFD9006A59B4 /* Appearance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Appearance.swift; sourceTree = "<group>"; };
 		EBE79C672602EC93006A59B4 /* Network.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Network.swift; sourceTree = "<group>"; };
 		EBE79C712602EFB7006A59B4 /* Profile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Profile.swift; sourceTree = "<group>"; };
@@ -70,6 +76,7 @@
 		EB5D67D026029CDC007DD1AC /* TheNameGame */ = {
 			isa = PBXGroup;
 			children = (
+				EB91801D2617CAAC0073B22E /* Concurrency */,
 				EBE79C742602F61A006A59B4 /* View Model */,
 				EBE79C702602EFA3006A59B4 /* Model */,
 				EBE79C6F2602EF8C006A59B4 /* Service */,
@@ -110,11 +117,21 @@
 			path = "View Controller";
 			sourceTree = "<group>";
 		};
+		EB91801D2617CAAC0073B22E /* Concurrency */ = {
+			isa = PBXGroup;
+			children = (
+				EB91801E2617CAC80073B22E /* ConcorrencyOperation.swift */,
+				EB9180212617CAEC0073B22E /* FetchImageOperation.swift */,
+			);
+			path = Concurrency;
+			sourceTree = "<group>";
+		};
 		EBE79C612602CFC7006A59B4 /* Utililty */ = {
 			isa = PBXGroup;
 			children = (
 				EBE79C622602CFD9006A59B4 /* Appearance.swift */,
 				EBE79C7A2602F923006A59B4 /* BoxObservable.swift */,
+				EB91801A2617CA810073B22E /* Cache.swift */,
 			);
 			path = Utililty;
 			sourceTree = "<group>";
@@ -222,8 +239,11 @@
 				EBE79C822603BE72006A59B4 /* ProfileCollectionViewCell.swift in Sources */,
 				EBE79C722602EFB7006A59B4 /* Profile.swift in Sources */,
 				EB5D67D226029CDC007DD1AC /* AppDelegate.swift in Sources */,
+				EB91801B2617CA810073B22E /* Cache.swift in Sources */,
 				EB5D67EF2602CC08007DD1AC /* MenuViewController.swift in Sources */,
 				EBE79C7E26032D91006A59B4 /* GameViewController.swift in Sources */,
+				EB91801F2617CAC80073B22E /* ConcorrencyOperation.swift in Sources */,
+				EB9180222617CAEC0073B22E /* FetchImageOperation.swift in Sources */,
 				EBE79C632602CFD9006A59B4 /* Appearance.swift in Sources */,
 				EBE79C7B2602F923006A59B4 /* BoxObservable.swift in Sources */,
 				EBE79C852603CA10006A59B4 /* GameViewModel.swift in Sources */,

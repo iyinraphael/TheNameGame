@@ -25,6 +25,9 @@ class GameViewController: UIViewController, GameiSCorrectDelegate {
     var isCorrect: Bool = false
     weak var delegate: PlayModeDelegate?
     var value: Double?
+    private let cache = Cache<String, UIImage>()
+    private let photoQueue = OperationQueue()
+    private var operations = [String: Operation]()
     
     lazy var horizontalConstraints: [NSLayoutConstraint] = [
         fullNameLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 96),
@@ -125,6 +128,45 @@ class GameViewController: UIViewController, GameiSCorrectDelegate {
         displayTraitCollection()
     }
     
+    private func displayTraitCollection(){
+        if traitCollection.horizontalSizeClass == .compact && traitCollection.verticalSizeClass == .regular{
+            NSLayoutConstraint.deactivate(horizontalConstraints)
+            NSLayoutConstraint.activate(verticalConstraints)
+            collectionView.collectionViewLayout.invalidateLayout()
+        }
+        else if  traitCollection.verticalSizeClass == .compact && traitCollection.horizontalSizeClass == .compact {
+            NSLayoutConstraint.deactivate(verticalConstraints)
+            NSLayoutConstraint.activate(horizontalConstraints)
+            collectionView.collectionViewLayout.invalidateLayout()
+        }
+        else if traitCollection.verticalSizeClass == .regular && traitCollection.horizontalSizeClass == .regular {
+            NSLayoutConstraint.deactivate(horizontalConstraints)
+            NSLayoutConstraint.deactivate(verticalConstraints)
+            NSLayoutConstraint.activate(regularConstraint)
+            collectionView.collectionViewLayout.invalidateLayout()
+        }
+    }
+    
+    private func gameOverAlertView(with score: Int, _ count: Int) {
+        let message = "\(score)/\(count)"
+        
+        alertController = UIAlertController(title: "Game Over", message: message, preferredStyle: .alert)
+        let action = UIAlertAction(title: "Ok", style: .cancel) { [weak self] _ in
+            self?.navigationController?.popViewController(animated: true)
+        }
+        alertController.addAction(action)
+        present(alertController, animated: true)
+    }
+    
+    private func correctAnswerAlertView() {
+        alertController = UIAlertController(title: "Correct", message:"Keep going!", preferredStyle: .alert)
+        let action = UIAlertAction(title: "Ok", style: .cancel) { [weak self] _ in
+            self?.viewModel.getRandomProfile()
+        }
+        alertController.addAction(action)
+        present(alertController, animated: true)
+    }
+    
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         displayTraitCollection()
@@ -141,8 +183,8 @@ extension GameViewController:UICollectionViewDelegate, UICollectionViewDataSourc
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as? ProfileCollectionViewCell else { return UICollectionViewCell() }
-        let profile = viewModel.filteredProfiles?[indexPath.item]
-        cell.profileImageView.image = viewModel.getImage(from: profile?.headshot.url)
+        
+        loadImage(for: cell, with: indexPath)
         
         return cell
 
@@ -224,43 +266,49 @@ extension GameViewController {
         
     }
     
+}
+
+
+    //MARK: - Load cell with cache
+
+extension GameViewController {
     
-    private func gameOverAlertView(with score: Int, _ count: Int) {
-        let message = "\(score)/\(count)"
+    private func loadImage(for cell: ProfileCollectionViewCell, with indexPath: IndexPath) {
+        guard let profile = viewModel.filteredProfiles?[indexPath.item],
+        let imageString = profile.headshot.url else{ return}
+        let profileId = profile.id
         
-        alertController = UIAlertController(title: "Game Over", message: message, preferredStyle: .alert)
-        let action = UIAlertAction(title: "Ok", style: .cancel) { [weak self] _ in
-            self?.navigationController?.popViewController(animated: true)
+        if let cacheImage = cache.value(for: profileId) {
+            DispatchQueue.main.async {
+                cell.profileImageView.image = cacheImage
+            }
         }
-        alertController.addAction(action)
-        present(alertController, animated: true)
-    }
-    
-    private func correctAnswerAlertView() {
-        alertController = UIAlertController(title: "Correct", message:"Keep going!", preferredStyle: .alert)
-        let action = UIAlertAction(title: "Ok", style: .cancel) { [weak self] _ in
-            self?.viewModel.getRandomProfile()
+        
+        let fetchOp = FetchImageOperation(imageString: "https:\(imageString)")
+        
+        let cacheOp = BlockOperation { [weak self] in
+            if let image = fetchOp.image {
+                self?.cache.cache(value: image, for: profileId)
+            }
         }
-        alertController.addAction(action)
-        present(alertController, animated: true)
-    }
-    
-    private func displayTraitCollection(){
-        if traitCollection.horizontalSizeClass == .compact && traitCollection.verticalSizeClass == .regular{
-            NSLayoutConstraint.deactivate(horizontalConstraints)
-            NSLayoutConstraint.activate(verticalConstraints)
-            collectionView.collectionViewLayout.invalidateLayout()
+        let completOp = BlockOperation { [weak self] in
+            defer {self?.operations.removeValue(forKey: profileId)}
+            
+            if let currentIndexpath = self?.collectionView.indexPath(for: cell),
+               currentIndexpath != indexPath { return }
+            
+            if let image = fetchOp.image {
+                cell.profileImageView.image = image
+            }
         }
-        else if  traitCollection.verticalSizeClass == .compact && traitCollection.horizontalSizeClass == .compact {
-            NSLayoutConstraint.deactivate(verticalConstraints)
-            NSLayoutConstraint.activate(horizontalConstraints)
-            collectionView.collectionViewLayout.invalidateLayout()
-        }
-        else if traitCollection.verticalSizeClass == .regular && traitCollection.horizontalSizeClass == .regular {
-            NSLayoutConstraint.deactivate(horizontalConstraints)
-            NSLayoutConstraint.deactivate(verticalConstraints)
-            NSLayoutConstraint.activate(regularConstraint)
-            collectionView.collectionViewLayout.invalidateLayout()
-        }
+        cacheOp.addDependency(fetchOp)
+        completOp.addDependency(fetchOp)
+        
+        photoQueue.addOperation(fetchOp)
+        photoQueue.addOperation(cacheOp)
+        
+        OperationQueue.main.addOperation(completOp)
+        operations[profileId] = fetchOp
+        
     }
 }
