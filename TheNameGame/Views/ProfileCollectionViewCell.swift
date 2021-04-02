@@ -17,7 +17,6 @@ class ProfileCollectionViewCell: UICollectionViewCell {
     var profileImageView: UIImageView!
     let strikeLayer = CALayer()
     weak var delegate: GameiSCorrectDelegate?
-    
     var profile: Profile? {
         didSet {
             self.addSubLayer()
@@ -26,8 +25,6 @@ class ProfileCollectionViewCell: UICollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
-    
         profileImageView = UIImageView()
         profileImageView.translatesAutoresizingMaskIntoConstraints = false
         profileImageView.contentMode = .scaleAspectFill
@@ -41,19 +38,15 @@ class ProfileCollectionViewCell: UICollectionViewCell {
             profileImageView.heightAnchor.constraint(equalTo: widthAnchor)
         ])
     }
-    
     override func prepareForReuse() {
         super.prepareForReuse()
         profileImageView.image = nil
         strikeLayer.removeFromSuperlayer()
     }
-
-    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    func addSubLayer() {
+    private func addSubLayer() {
         let checkImage = UIImage(named: "checkMark")?.cgImage
         let strikeImage = UIImage(named: "strikeMark")?.cgImage
         

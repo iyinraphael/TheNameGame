@@ -92,7 +92,6 @@ class GameViewController: UIViewController, GameiSCorrectDelegate {
         collectionView.dataSource = self
         collectionView.backgroundColor = .white
         
-        
         view.addSubview(fullNameLabel)
         view.addSubview(collectionView)
     }
@@ -105,11 +104,9 @@ class GameViewController: UIViewController, GameiSCorrectDelegate {
                 self?.collectionView.reloadData()
             }
         }
-        
         viewModel.fullName.bind { [weak self] fullName in
             self?.fullNameLabel.text = fullName
         }
-        
         if delegate?.playmode == .some(.timedMode) {
             view.addSubview(progressCircularView)
             NSLayoutConstraint.activate([
@@ -117,17 +114,16 @@ class GameViewController: UIViewController, GameiSCorrectDelegate {
             progressCircularView.heightAnchor.constraint(equalToConstant: 30),
             progressCircularView.widthAnchor.constraint(equalToConstant: 30),
             ])
-            
             progressCircularView.setProgress(to: 1, withAnimation: true) {
                 if self.isViewLoaded {
                     self.gameOverAlertView(with: self.scoreCount, self.attempCount)
                 }
             }
         }
-        
         displayTraitCollection()
     }
     
+    // MARK: - UI and Contrainsts
     private func displayTraitCollection(){
         if traitCollection.horizontalSizeClass == .compact && traitCollection.verticalSizeClass == .regular{
             NSLayoutConstraint.deactivate(horizontalConstraints)
@@ -225,17 +221,14 @@ extension GameViewController: UICollectionViewDelegateFlowLayout {
 extension GameViewController {
     private func gamePlayMode(_ profile: Profile?, _ cell: ProfileCollectionViewCell) {
         attempCount += 1
-        
         guard let profile = profile else { return }
         let guessName = "\(profile.firstName) \(profile.lastName)"
         
         switch delegate?.playmode {
-        
         case .practiceMode:
             if fullNameLabel.text != guessName {
                 isCorrect = false
                 cell.profile = profile
-                
                 gameOverAlertView(with: scoreCount, attempCount)
                 alertController.removeFromParent()
                 return
@@ -243,10 +236,8 @@ extension GameViewController {
             scoreCount += 1
             isCorrect = true
             cell.profile = profile
-            
             correctAnswerAlertView()
             alertController.removeFromParent()
-            
         case .timedMode:
             if fullNameLabel.text != guessName {
                 isCorrect = false
@@ -256,20 +247,16 @@ extension GameViewController {
             scoreCount += 1
             isCorrect = true
             cell.profile = profile
-            
             correctAnswerAlertView()
             alertController.removeFromParent()
-            
         default:
             fatalError()
         }
-        
     }
-    
 }
 
 
-    //MARK: - Load cell with cache
+    //MARK: - Load cell concurrently with cache
 
 extension GameViewController {
     

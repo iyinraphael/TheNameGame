@@ -185,7 +185,7 @@ class MenuViewController: UIViewController, PlayModeDelegate {
     }
     
     
-    // MARK: - Methods for Game state
+    // MARK: - Methods to select game state
     @objc func playPracticeMode() {
         let vc = GameViewController()
         vc.title = "Pratice Mode"
