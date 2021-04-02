@@ -18,6 +18,26 @@ class GameViewController: UIViewController, GameiSCorrectDelegate {
     weak var delegate: PlayModeDelegate?
     var value: Double?
     
+    lazy var horizontalConstraints: [NSLayoutConstraint] = [
+        fullNameLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 96),
+        fullNameLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 92),
+        
+        collectionView.leadingAnchor.constraint(equalTo: fullNameLabel.trailingAnchor, constant: 86),
+        collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -50),
+        collectionView.topAnchor.constraint(equalTo: view.topAnchor),
+        collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+    ]
+    
+    lazy var verticalConstraints: [NSLayoutConstraint] = [
+        fullNameLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 30),
+        fullNameLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+        
+        collectionView.topAnchor.constraint(equalTo: fullNameLabel.bottomAnchor),
+        collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+        collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+        collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+    ]
+    
     
     // MARK: - Outlets
     var collectionView: UICollectionView!
@@ -25,7 +45,10 @@ class GameViewController: UIViewController, GameiSCorrectDelegate {
     var cellView: UIView!
     var alertController: UIAlertController!
     var progressCircularView: CircularProgressBar!
+    var stackView: UIStackView!
+
     
+    // MARK: - View Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         progressCircularView = CircularProgressBar()
@@ -54,25 +77,13 @@ class GameViewController: UIViewController, GameiSCorrectDelegate {
         collectionView.dataSource = self
         collectionView.backgroundColor = .white
         
+        
         view.addSubview(fullNameLabel)
         view.addSubview(collectionView)
-        view.addSubview(progressCircularView)
         
-        NSLayoutConstraint.activate([
-            fullNameLabel.topAnchor.constraint(equalTo: view.layoutMarginsGuide.topAnchor, constant: 30),
-            fullNameLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            
-            progressCircularView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
-            progressCircularView.heightAnchor.constraint(equalToConstant: 30),
-            progressCircularView.widthAnchor.constraint(equalToConstant: 30),
-            
-            collectionView.topAnchor.constraint(equalTo: fullNameLabel.bottomAnchor),
-            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-        ])
-    
+        displayTraitCollection()
     }
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
@@ -87,13 +98,26 @@ class GameViewController: UIViewController, GameiSCorrectDelegate {
         }
         
         if delegate?.playmode == .some(.timedMode) {
+            view.addSubview(progressCircularView)
+            NSLayoutConstraint.activate([
+            progressCircularView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
+            progressCircularView.heightAnchor.constraint(equalToConstant: 30),
+            progressCircularView.widthAnchor.constraint(equalToConstant: 30),
+            ])
+            
             progressCircularView.setProgress(to: 1, withAnimation: true) {
                 self.gameOverAlertView(with: self.scoreCount, self.attempCount)
                 self.alertController.removeFromParent()
             }
         }
+        
+        displayTraitCollection()
     }
     
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        displayTraitCollection()
+    }
 }
 
     
@@ -121,8 +145,34 @@ extension GameViewController:UICollectionViewDelegate, UICollectionViewDataSourc
             gamePlayMode(profile, cell)
         }
     }
+}
+
+     // MARK: - UICollectionViewDelegateFlowLayout
+extension GameViewController: UICollectionViewDelegateFlowLayout {
     
-    // MARK: - Game Logic
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        
+        if  traitCollection.verticalSizeClass == .compact && traitCollection.horizontalSizeClass == .compact {
+            let numberOfItemsPerRow: CGFloat = 3
+            let spacing: CGFloat = 12
+            let totalSpacing = (2 * spacing) + ((numberOfItemsPerRow - 1) * spacing)
+            let itemSize = (collectionView.bounds.width - totalSpacing) / numberOfItemsPerRow
+            print(itemSize)
+            return CGSize(width: itemSize, height: itemSize)
+        }
+        let numberOfItemsPerRow: CGFloat = 2
+        let spacing: CGFloat = 12
+        let totalSpacing = (2 * spacing) + ((numberOfItemsPerRow - 1) * spacing)
+        let itemSize = (collectionView.bounds.width - totalSpacing) / numberOfItemsPerRow
+        print(itemSize)
+        return CGSize(width: itemSize, height: itemSize)
+    }
+}
+
+
+
+// MARK: - Game Logic
+extension GameViewController {
     private func gamePlayMode(_ profile: Profile?, _ cell: ProfileCollectionViewCell) {
         attempCount += 1
         
@@ -138,6 +188,7 @@ extension GameViewController:UICollectionViewDelegate, UICollectionViewDataSourc
                 
                 gameOverAlertView(with: scoreCount, attempCount)
                 alertController.removeFromParent()
+                return
             }
             scoreCount += 1
             isCorrect = true
@@ -145,7 +196,7 @@ extension GameViewController:UICollectionViewDelegate, UICollectionViewDataSourc
             
             correctAnswerAlertView()
             alertController.removeFromParent()
-        
+            
         case .timedMode:
             if fullNameLabel.text != guessName {
                 isCorrect = false
@@ -158,13 +209,13 @@ extension GameViewController:UICollectionViewDelegate, UICollectionViewDataSourc
             
             correctAnswerAlertView()
             alertController.removeFromParent()
-       
+            
         default:
             fatalError()
         }
         
     }
-
+    
     
     private func gameOverAlertView(with score: Int, _ count: Int) {
         let message = "\(score)/\(count)"
@@ -185,18 +236,17 @@ extension GameViewController:UICollectionViewDelegate, UICollectionViewDataSourc
         alertController.addAction(action)
         present(alertController, animated: true)
     }
-
-}
-
-     // MARK: - UICollectionViewDelegateFlowLayout
-extension GameViewController: UICollectionViewDelegateFlowLayout {
-
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let numberOfItemsPerRow: CGFloat = 2
-        let spacing: CGFloat = 12
-        let totalSpacing = (2 * spacing) + ((numberOfItemsPerRow - 1) * spacing)
-        let itemSize = (collectionView.bounds.width - totalSpacing) / numberOfItemsPerRow
-
-        return CGSize(width: itemSize, height: itemSize)
+    
+    private func displayTraitCollection(){
+        if traitCollection.horizontalSizeClass == .compact && traitCollection.verticalSizeClass == .regular{
+            NSLayoutConstraint.deactivate(horizontalConstraints)
+            NSLayoutConstraint.activate(verticalConstraints)
+            collectionView.collectionViewLayout.invalidateLayout()
+        }
+        else if  traitCollection.verticalSizeClass == .compact && traitCollection.horizontalSizeClass == .compact {
+            NSLayoutConstraint.deactivate(verticalConstraints)
+            NSLayoutConstraint.activate(horizontalConstraints)
+            collectionView.collectionViewLayout.invalidateLayout()
+        }
     }
 }

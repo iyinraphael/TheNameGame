@@ -44,6 +44,7 @@ class ProfileCollectionViewCell: UICollectionViewCell {
     
     override func prepareForReuse() {
         super.prepareForReuse()
+        profileImageView.image = nil
         strikeLayer.removeFromSuperlayer()
     }
 
