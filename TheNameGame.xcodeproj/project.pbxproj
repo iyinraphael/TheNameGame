@@ -14,6 +14,7 @@
 		EB91801B2617CA810073B22E /* Cache.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB91801A2617CA810073B22E /* Cache.swift */; };
 		EB91801F2617CAC80073B22E /* ConcorrencyOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB91801E2617CAC80073B22E /* ConcorrencyOperation.swift */; };
 		EB9180222617CAEC0073B22E /* FetchImageOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9180212617CAEC0073B22E /* FetchImageOperation.swift */; };
+		EB91802C2617DB860073B22E /* TheNameGameTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB91802B2617DB860073B22E /* TheNameGameTests.swift */; };
 		EBE79C632602CFD9006A59B4 /* Appearance.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBE79C622602CFD9006A59B4 /* Appearance.swift */; };
 		EBE79C682602EC93006A59B4 /* Network.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBE79C672602EC93006A59B4 /* Network.swift */; };
 		EBE79C6D2602EED7006A59B4 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = EBE79C6C2602EED7006A59B4 /* Alamofire */; };
@@ -25,6 +26,16 @@
 		EBE79CA02609225F006A59B4 /* CircularProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBE79C9F2609225F006A59B4 /* CircularProgressBar.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		EB91802E2617DB860073B22E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EB5D67C626029CDC007DD1AC /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = EB5D67CD26029CDC007DD1AC;
+			remoteInfo = TheNameGame;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
 		EB5D67CE26029CDC007DD1AC /* TheNameGame.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TheNameGame.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EB5D67D126029CDC007DD1AC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -35,6 +46,9 @@
 		EB91801A2617CA810073B22E /* Cache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cache.swift; sourceTree = "<group>"; };
 		EB91801E2617CAC80073B22E /* ConcorrencyOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConcorrencyOperation.swift; sourceTree = "<group>"; };
 		EB9180212617CAEC0073B22E /* FetchImageOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchImageOperation.swift; sourceTree = "<group>"; };
+		EB9180292617DB860073B22E /* TheNameGameTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TheNameGameTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		EB91802B2617DB860073B22E /* TheNameGameTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TheNameGameTests.swift; sourceTree = "<group>"; };
+		EB91802D2617DB860073B22E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		EBE79C622602CFD9006A59B4 /* Appearance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Appearance.swift; sourceTree = "<group>"; };
 		EBE79C672602EC93006A59B4 /* Network.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Network.swift; sourceTree = "<group>"; };
 		EBE79C712602EFB7006A59B4 /* Profile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Profile.swift; sourceTree = "<group>"; };
@@ -54,6 +68,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		EB9180262617DB860073B22E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -61,6 +82,7 @@
 			isa = PBXGroup;
 			children = (
 				EB5D67D026029CDC007DD1AC /* TheNameGame */,
+				EB91802A2617DB860073B22E /* TheNameGameTests */,
 				EB5D67CF26029CDC007DD1AC /* Products */,
 			);
 			sourceTree = "<group>";
@@ -69,6 +91,7 @@
 			isa = PBXGroup;
 			children = (
 				EB5D67CE26029CDC007DD1AC /* TheNameGame.app */,
+				EB9180292617DB860073B22E /* TheNameGameTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -124,6 +147,15 @@
 				EB9180212617CAEC0073B22E /* FetchImageOperation.swift */,
 			);
 			path = Concurrency;
+			sourceTree = "<group>";
+		};
+		EB91802A2617DB860073B22E /* TheNameGameTests */ = {
+			isa = PBXGroup;
+			children = (
+				EB91802B2617DB860073B22E /* TheNameGameTests.swift */,
+				EB91802D2617DB860073B22E /* Info.plist */,
+			);
+			path = TheNameGameTests;
 			sourceTree = "<group>";
 		};
 		EBE79C612602CFC7006A59B4 /* Utililty */ = {
@@ -183,6 +215,24 @@
 			productReference = EB5D67CE26029CDC007DD1AC /* TheNameGame.app */;
 			productType = "com.apple.product-type.application";
 		};
+		EB9180282617DB860073B22E /* TheNameGameTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = EB9180322617DB860073B22E /* Build configuration list for PBXNativeTarget "TheNameGameTests" */;
+			buildPhases = (
+				EB9180252617DB860073B22E /* Sources */,
+				EB9180262617DB860073B22E /* Frameworks */,
+				EB9180272617DB860073B22E /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				EB91802F2617DB860073B22E /* PBXTargetDependency */,
+			);
+			name = TheNameGameTests;
+			productName = TheNameGameTests;
+			productReference = EB9180292617DB860073B22E /* TheNameGameTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -194,6 +244,10 @@
 				TargetAttributes = {
 					EB5D67CD26029CDC007DD1AC = {
 						CreatedOnToolsVersion = 12.4;
+					};
+					EB9180282617DB860073B22E = {
+						CreatedOnToolsVersion = 12.4;
+						TestTargetID = EB5D67CD26029CDC007DD1AC;
 					};
 				};
 			};
@@ -214,6 +268,7 @@
 			projectRoot = "";
 			targets = (
 				EB5D67CD26029CDC007DD1AC /* TheNameGame */,
+				EB9180282617DB860073B22E /* TheNameGameTests */,
 			);
 		};
 /* End PBXProject section */
@@ -225,6 +280,13 @@
 			files = (
 				EB5D67DE26029CDF007DD1AC /* LaunchScreen.storyboard in Resources */,
 				EB5D67DB26029CDF007DD1AC /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		EB9180272617DB860073B22E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -251,7 +313,23 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		EB9180252617DB860073B22E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				EB91802C2617DB860073B22E /* TheNameGameTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		EB91802F2617DB860073B22E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = EB5D67CD26029CDC007DD1AC /* TheNameGame */;
+			targetProxy = EB91802E2617DB860073B22E /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		EB5D67DC26029CDF007DD1AC /* LaunchScreen.storyboard */ = {
@@ -419,6 +497,46 @@
 			};
 			name = Release;
 		};
+		EB9180302617DB860073B22E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = W6VGBGBJ68;
+				INFOPLIST_FILE = TheNameGameTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.iyinraphael.TheNameGameTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TheNameGame.app/TheNameGame";
+			};
+			name = Debug;
+		};
+		EB9180312617DB860073B22E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = W6VGBGBJ68;
+				INFOPLIST_FILE = TheNameGameTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.iyinraphael.TheNameGameTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TheNameGame.app/TheNameGame";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -436,6 +554,15 @@
 			buildConfigurations = (
 				EB5D67E326029CDF007DD1AC /* Debug */,
 				EB5D67E426029CDF007DD1AC /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		EB9180322617DB860073B22E /* Build configuration list for PBXNativeTarget "TheNameGameTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				EB9180302617DB860073B22E /* Debug */,
+				EB9180312617DB860073B22E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

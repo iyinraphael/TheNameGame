@@ -114,10 +114,12 @@ class GameViewController: UIViewController, GameiSCorrectDelegate {
             progressCircularView.heightAnchor.constraint(equalToConstant: 30),
             progressCircularView.widthAnchor.constraint(equalToConstant: 30),
             ])
-            progressCircularView.setProgress(to: 1, withAnimation: true) {
+            progressCircularView.setProgress(to: 1, withAnimation: true) { [weak self] in
+                guard let self = self else { return }
                 if self.isViewLoaded {
                     self.gameOverAlertView(with: self.scoreCount, self.attempCount)
                 }
+                self.alertController.removeFromParent()
             }
         }
         displayTraitCollection()
