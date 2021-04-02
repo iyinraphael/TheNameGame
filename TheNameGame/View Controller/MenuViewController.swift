@@ -18,31 +18,79 @@ enum PlayMode: String {
 class MenuViewController: UIViewController, PlayModeDelegate {
 
     // MARK: - Outlets
-    var backgroundImageView: UIImageView!
-    var practiceModeButton: UIButton!
-    var timedModeButton: UIButton!
+    private weak var portraitBackgroundImageView: UIImageView!
+    private weak var landscapeBackgroundImageView: UIImageView!
+    private weak var practiceModeButton: UIButton!
+    private weak var timedModeButton: UIButton!
+    private weak var instructionLabel: UILabel!
     
     // MARK: - Properties
     var playmode = PlayMode.none
+    let space: CGFloat = 8
+    let radius: CGFloat = 14
+    
+    lazy var verticalConstraints: [NSLayoutConstraint] = [
+        portraitBackgroundImageView.topAnchor.constraint(equalTo: view.topAnchor),
+        portraitBackgroundImageView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+        portraitBackgroundImageView.widthAnchor.constraint(equalTo: view.widthAnchor),
+        
+        instructionLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: (space * 6) - 1),
+        instructionLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: (-space * 6) - 1),
+        instructionLabel.bottomAnchor.constraint(equalTo: practiceModeButton.topAnchor, constant: -space * 2),
+        
+        practiceModeButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: space),
+        practiceModeButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -space),
+        practiceModeButton.heightAnchor.constraint(equalToConstant: space * 7),
+        
+        timedModeButton.topAnchor.constraint(equalTo: practiceModeButton.bottomAnchor, constant: space),
+        timedModeButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: space),
+        timedModeButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -space),
+        timedModeButton.heightAnchor.constraint(equalToConstant: space * 7),
+        timedModeButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: (-space * 5) - 2)
+        
+    ]
+    
+    lazy var horizontalConstraints: [NSLayoutConstraint] = [
+        landscapeBackgroundImageView.topAnchor.constraint(equalTo: view.topAnchor),
+        landscapeBackgroundImageView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+        landscapeBackgroundImageView.widthAnchor.constraint(equalTo: view.widthAnchor),
+        
+        instructionLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 424),
+        instructionLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -107),
+        instructionLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 104),
+        
+        practiceModeButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 389),
+        practiceModeButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 199),
+        practiceModeButton.widthAnchor.constraint(equalToConstant: 359),
+        practiceModeButton.heightAnchor.constraint(equalToConstant: 56),
+        
+        timedModeButton.leadingAnchor.constraint(equalTo: practiceModeButton.leadingAnchor),
+        timedModeButton.topAnchor.constraint(equalTo: practiceModeButton.bottomAnchor, constant: space),
+        timedModeButton.widthAnchor.constraint(equalTo: practiceModeButton.widthAnchor),
+        timedModeButton.heightAnchor.constraint(equalTo: practiceModeButton.heightAnchor)
+    ]
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let width = view.frame.width
-        let height = view.frame.height
-        let radius: CGFloat = 14
+        let portraitBackgroundImageView = UIImageView()
+        portraitBackgroundImageView.translatesAutoresizingMaskIntoConstraints = false
+        self.portraitBackgroundImageView = portraitBackgroundImageView
         
-        backgroundImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: width, height: height))
-        backgroundImageView.image = UIImage(named: "Splash Screen")
+        let landscapeBackgroundImageView = UIImageView()
+        landscapeBackgroundImageView.translatesAutoresizingMaskIntoConstraints = false
+        self.landscapeBackgroundImageView = landscapeBackgroundImageView
         
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.numberOfLines = 0
-        label.text = "Try matching the WillowTree employee to their photo"
-        label.textColor = .white
-        label.textAlignment = .center
+        let instructionLabel = UILabel()
+        instructionLabel.translatesAutoresizingMaskIntoConstraints = false
+        instructionLabel.numberOfLines = 0
+        instructionLabel.text = "Try matching the WillowTree employee to their photo"
+        instructionLabel.textColor = .white
+        instructionLabel.font = .systemFont(ofSize: 17)
+        instructionLabel.textAlignment = .center
+        self.instructionLabel = instructionLabel
         
-        practiceModeButton = UIButton()
+        let practiceModeButton = UIButton()
         practiceModeButton.translatesAutoresizingMaskIntoConstraints = false
         practiceModeButton.setTitle("Practice Mode", for: .normal)
         practiceModeButton.addTarget(self, action: #selector(playPracticeMode), for: .touchUpInside)
@@ -50,8 +98,9 @@ class MenuViewController: UIViewController, PlayModeDelegate {
         practiceModeButton.backgroundColor = Appearance.buttonColor
         practiceModeButton.layer.masksToBounds = true
         practiceModeButton.layer.cornerRadius = radius
+        self.practiceModeButton = practiceModeButton
         
-        timedModeButton = UIButton()
+        let timedModeButton = UIButton()
         timedModeButton.translatesAutoresizingMaskIntoConstraints = false
         timedModeButton.setTitle("Timed Mode", for: .normal)
         timedModeButton.addTarget(self, action: #selector(playTimedMode), for: .touchUpInside)
@@ -59,28 +108,16 @@ class MenuViewController: UIViewController, PlayModeDelegate {
         timedModeButton.backgroundColor = Appearance.buttonColor
         timedModeButton.layer.masksToBounds = true
         timedModeButton.layer.cornerRadius = radius
+        self.timedModeButton = timedModeButton
         
-        view.addSubview(backgroundImageView)
-        view.addSubview(label)
+        view.addSubview(portraitBackgroundImageView)
+        view.addSubview(landscapeBackgroundImageView)
+        view.addSubview(instructionLabel)
         view.addSubview(practiceModeButton)
         view.addSubview(timedModeButton)
         
-        let space: CGFloat = 8
-        NSLayoutConstraint.activate([
-            label.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 47),
-            label.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -47),
-            label.bottomAnchor.constraint(equalTo: practiceModeButton.topAnchor, constant: -space * 2),
-            
-            practiceModeButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: space),
-            practiceModeButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -space),
-            practiceModeButton.heightAnchor.constraint(equalToConstant: space * 7),
-            
-            timedModeButton.topAnchor.constraint(equalTo: practiceModeButton.bottomAnchor, constant: space),
-            timedModeButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: space),
-            timedModeButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -space),
-            timedModeButton.heightAnchor.constraint(equalToConstant: space * 7),
-            timedModeButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -42)
-        ])
+        displayTraitCollection()
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -91,7 +128,32 @@ class MenuViewController: UIViewController, PlayModeDelegate {
         navigationController?.navigationBar.shadowImage = UIImage()
     }
     
-    // MARK: - Methods
+    
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        displayTraitCollection()
+    }
+    
+    
+    private func displayTraitCollection(){
+        if traitCollection.horizontalSizeClass == .compact && traitCollection.verticalSizeClass == .regular{
+            landscapeBackgroundImageView.image = nil
+            portraitBackgroundImageView.image = UIImage(named: "Splash Screen")
+            
+            NSLayoutConstraint.deactivate(horizontalConstraints)
+            NSLayoutConstraint.activate(verticalConstraints)
+        }
+        else if  traitCollection.verticalSizeClass == .compact && traitCollection.horizontalSizeClass == .compact {
+            portraitBackgroundImageView.image = nil
+            landscapeBackgroundImageView.image = UIImage(named: "splashLandcape")
+            
+            NSLayoutConstraint.deactivate(verticalConstraints)
+            NSLayoutConstraint.activate(horizontalConstraints)
+        }
+    }
+    
+    
+    // MARK: - Methods for Game state
     @objc func playPracticeMode() {
         let vc = GameViewController()
         vc.title = "Pratice Mode"

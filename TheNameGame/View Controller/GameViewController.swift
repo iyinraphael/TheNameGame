@@ -9,6 +9,15 @@ import UIKit
 import Kingfisher
 
 class GameViewController: UIViewController, GameiSCorrectDelegate {
+    
+    // MARK: - Outlets
+    var collectionView: UICollectionView!
+    var fullNameLabel: UILabel!
+    var cellView: UIView!
+    var alertController: UIAlertController!
+    var progressCircularView: CircularProgressBar!
+    var stackView: UIStackView!
+    
     // MARK: - Properties
     private let reuseIdentifier = "cell"
     var viewModel = GameViewModel()
@@ -21,6 +30,7 @@ class GameViewController: UIViewController, GameiSCorrectDelegate {
     lazy var horizontalConstraints: [NSLayoutConstraint] = [
         fullNameLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 96),
         fullNameLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 92),
+        fullNameLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -600),
         
         collectionView.leadingAnchor.constraint(equalTo: fullNameLabel.trailingAnchor, constant: 86),
         collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -50),
@@ -37,16 +47,6 @@ class GameViewController: UIViewController, GameiSCorrectDelegate {
         collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
         collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
     ]
-    
-    
-    // MARK: - Outlets
-    var collectionView: UICollectionView!
-    var fullNameLabel: UILabel!
-    var cellView: UIView!
-    var alertController: UIAlertController!
-    var progressCircularView: CircularProgressBar!
-    var stackView: UIStackView!
-
     
     // MARK: - View Cycle
     override func viewDidLoad() {
@@ -66,6 +66,9 @@ class GameViewController: UIViewController, GameiSCorrectDelegate {
         
         fullNameLabel = UILabel()
         fullNameLabel.translatesAutoresizingMaskIntoConstraints = false
+        fullNameLabel.adjustsFontSizeToFitWidth = true
+        fullNameLabel.font = .boldSystemFont(ofSize: 32)
+        fullNameLabel.numberOfLines = 2
         
         let layout = UICollectionViewFlowLayout()
         layout.sectionInset = UIEdgeInsets(top: 24, left: 12, bottom: 24, right: 12)
@@ -80,8 +83,6 @@ class GameViewController: UIViewController, GameiSCorrectDelegate {
         
         view.addSubview(fullNameLabel)
         view.addSubview(collectionView)
-        
-        displayTraitCollection()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -106,8 +107,9 @@ class GameViewController: UIViewController, GameiSCorrectDelegate {
             ])
             
             progressCircularView.setProgress(to: 1, withAnimation: true) {
-                self.gameOverAlertView(with: self.scoreCount, self.attempCount)
-                self.alertController.removeFromParent()
+                if self.isViewLoaded {
+                    self.gameOverAlertView(with: self.scoreCount, self.attempCount)
+                }
             }
         }
         
@@ -157,14 +159,12 @@ extension GameViewController: UICollectionViewDelegateFlowLayout {
             let spacing: CGFloat = 12
             let totalSpacing = (2 * spacing) + ((numberOfItemsPerRow - 1) * spacing)
             let itemSize = (collectionView.bounds.width - totalSpacing) / numberOfItemsPerRow
-            print(itemSize)
             return CGSize(width: itemSize, height: itemSize)
         }
         let numberOfItemsPerRow: CGFloat = 2
         let spacing: CGFloat = 12
         let totalSpacing = (2 * spacing) + ((numberOfItemsPerRow - 1) * spacing)
         let itemSize = (collectionView.bounds.width - totalSpacing) / numberOfItemsPerRow
-        print(itemSize)
         return CGSize(width: itemSize, height: itemSize)
     }
 }
