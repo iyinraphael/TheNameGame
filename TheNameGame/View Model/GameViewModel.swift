@@ -57,13 +57,14 @@ class GameViewModel {
         self.fullName.value = "\(name.firstName) \(name.lastName)"
     }
     
-    func getUrl(from imageString: String?) -> URL? {
+   func getImage(from imageString: String?) -> UIImage {
         guard let imageWithString = imageString,
-              let imageURL = URL(string: "https:\(imageWithString)")
-        else { return nil}
+              let imageURL = URL(string: "https:\(imageWithString)"),
+              let data = try? Data(contentsOf: imageURL),
+              let image = UIImage(data: data) else
+        { return UIImage()}
         
-        return imageURL
+        return image
     }
-    
 }
 

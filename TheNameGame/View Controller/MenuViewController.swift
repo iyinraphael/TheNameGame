@@ -70,11 +70,32 @@ class MenuViewController: UIViewController, PlayModeDelegate {
         timedModeButton.heightAnchor.constraint(equalTo: practiceModeButton.heightAnchor)
     ]
     
+    lazy var regularConstraint: [NSLayoutConstraint] = [
+        portraitBackgroundImageView.topAnchor.constraint(equalTo: view.topAnchor),
+        portraitBackgroundImageView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+        portraitBackgroundImageView.widthAnchor.constraint(equalTo: view.widthAnchor),
+        
+        instructionLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+        instructionLabel.widthAnchor.constraint(equalToConstant: 501),
+        instructionLabel.bottomAnchor.constraint(equalTo: practiceModeButton.topAnchor, constant: -space * 7),
+        practiceModeButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+        practiceModeButton.widthAnchor.constraint(equalToConstant: 433),
+        practiceModeButton.heightAnchor.constraint(equalToConstant: space * 7),
+        
+        timedModeButton.topAnchor.constraint(equalTo: practiceModeButton.bottomAnchor, constant: space),
+        timedModeButton.leadingAnchor.constraint(equalTo: practiceModeButton.leadingAnchor),
+        timedModeButton.trailingAnchor.constraint(equalTo: practiceModeButton.trailingAnchor),
+        timedModeButton.heightAnchor.constraint(equalToConstant: space * 7),
+        timedModeButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -92)
+    ]
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         let portraitBackgroundImageView = UIImageView()
         portraitBackgroundImageView.translatesAutoresizingMaskIntoConstraints = false
+        portraitBackgroundImageView.contentMode = .scaleAspectFill
         self.portraitBackgroundImageView = portraitBackgroundImageView
         
         let landscapeBackgroundImageView = UIImageView()
@@ -149,6 +170,17 @@ class MenuViewController: UIViewController, PlayModeDelegate {
             
             NSLayoutConstraint.deactivate(verticalConstraints)
             NSLayoutConstraint.activate(horizontalConstraints)
+        }
+        else if traitCollection.verticalSizeClass == .regular && traitCollection.horizontalSizeClass == .regular {
+            instructionLabel.font = nil
+            instructionLabel.font =  .systemFont(ofSize: 34)
+            instructionLabel.numberOfLines = 2
+            landscapeBackgroundImageView.image = nil
+            portraitBackgroundImageView.image = UIImage(named: "Splash Screen")
+            
+            NSLayoutConstraint.deactivate(horizontalConstraints)
+            NSLayoutConstraint.deactivate(verticalConstraints)
+            NSLayoutConstraint.activate(regularConstraint)
         }
     }
     

@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import Kingfisher
 
 class GameViewController: UIViewController, GameiSCorrectDelegate {
     
@@ -46,6 +45,16 @@ class GameViewController: UIViewController, GameiSCorrectDelegate {
         collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
         collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
         collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+    ]
+    
+    lazy var regularConstraint: [NSLayoutConstraint] = [
+        fullNameLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 30),
+        fullNameLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+        
+        collectionView.topAnchor.constraint(equalTo: fullNameLabel.bottomAnchor),
+        collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 114),
+        collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -114),
+        collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -63)
     ]
     
     // MARK: - View Cycle
@@ -133,8 +142,7 @@ extension GameViewController:UICollectionViewDelegate, UICollectionViewDataSourc
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as? ProfileCollectionViewCell else { return UICollectionViewCell() }
         let profile = viewModel.filteredProfiles?[indexPath.item]
-        let url = viewModel.getUrl(from: profile?.headshot.url)
-        cell.profileImageView.kf.setImage(with: url)
+        cell.profileImageView.image = viewModel.getImage(from: profile?.headshot.url)
         
         return cell
 
@@ -246,6 +254,12 @@ extension GameViewController {
         else if  traitCollection.verticalSizeClass == .compact && traitCollection.horizontalSizeClass == .compact {
             NSLayoutConstraint.deactivate(verticalConstraints)
             NSLayoutConstraint.activate(horizontalConstraints)
+            collectionView.collectionViewLayout.invalidateLayout()
+        }
+        else if traitCollection.verticalSizeClass == .regular && traitCollection.horizontalSizeClass == .regular {
+            NSLayoutConstraint.deactivate(horizontalConstraints)
+            NSLayoutConstraint.deactivate(verticalConstraints)
+            NSLayoutConstraint.activate(regularConstraint)
             collectionView.collectionViewLayout.invalidateLayout()
         }
     }
