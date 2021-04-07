@@ -104,9 +104,13 @@ class GameViewController: UIViewController, GameiSCorrectDelegate {
                 self?.collectionView.reloadData()
             }
         }
+        
         viewModel.fullName.bind { [weak self] fullName in
-            self?.fullNameLabel.text = fullName
+            DispatchQueue.main.async {
+                self?.fullNameLabel.text = fullName
+            }
         }
+        
         if delegate?.playmode == .some(.timedMode) {
             view.addSubview(progressCircularView)
             NSLayoutConstraint.activate([

@@ -17,18 +17,20 @@ enum NetworkError: Error {
 }
 
 class Network {
-    let endPoint = "https://willowtreeapps.com/api/v1.0/profiles"
+    let endPoint = URL(string: "https://willowtreeapps.com/api/v1.0/profiles")!
     typealias completionHandler = (Result<[Profile], NetworkError>) -> Void
     
     func getProfiles(completion: @escaping  completionHandler) {
+        let url = URLRequest(url: endPoint)
         
-        AF.request(endPoint).response { response in
-            if let error = response.error {
+        URLSession.shared.dataTask(with: url) { data, _, error in
+            
+            if let error = error {
                 NSLog("Error occured getting request\(error)")
                 completion(.failure(.otherError))
             }
             
-            guard let data = response.data else {
+            guard let data = data else {
                 NSLog("Failure no data from API")
                 completion(.failure(.noData))
                 return
@@ -43,6 +45,7 @@ class Network {
                 NSLog("Failed to decode data", "\(error.localizedDescription)")
                 completion(.failure(.failedToDecode))
             }
-        }
+        }.resume()
+     
     }
 }
