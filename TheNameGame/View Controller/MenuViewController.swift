@@ -28,7 +28,6 @@ class MenuViewController: UIViewController, PlayModeDelegate {
     var playmode = PlayMode.none
     private let space: CGFloat = 8
     private let radius: CGFloat = 14
-    private let nameGame = NameGame()
     
     lazy var verticalConstraints: [NSLayoutConstraint] = [
         portraitBackgroundImageView.topAnchor.constraint(equalTo: view.topAnchor),

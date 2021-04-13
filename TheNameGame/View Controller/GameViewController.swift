@@ -7,7 +7,7 @@
 
 import UIKit
 
-class GameViewController: UIViewController, GameiSCorrectDelegate {
+class GameViewController: UIViewController {
     
     // MARK: - Outlets
     var collectionView: UICollectionView!
@@ -19,10 +19,7 @@ class GameViewController: UIViewController, GameiSCorrectDelegate {
     
     // MARK: - Properties
     private let reuseIdentifier = "cell"
-    var viewModel = GameViewModel()
-    var attempCount = 0
-    var scoreCount = 0
-    var isCorrect: Bool = false
+    private var viewModel = GameViewModel()
     weak var delegate: PlayModeDelegate?
     var value: Double?
     let nameGame = NameGame()
@@ -86,6 +83,10 @@ class GameViewController: UIViewController, GameiSCorrectDelegate {
         let layout = UICollectionViewFlowLayout()
         layout.sectionInset = UIEdgeInsets(top: 24, left: 12, bottom: 24, right: 12)
         
+        viewModel.collectionView.bind { [weak self] collectionView in
+            self?.collectionView = collectionView
+        }
+        
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.register(ProfileCollectionViewCell.self, forCellWithReuseIdentifier: reuseIdentifier)
@@ -95,6 +96,8 @@ class GameViewController: UIViewController, GameiSCorrectDelegate {
         
         view.addSubview(fullNameLabel)
         view.addSubview(collectionView)
+        
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -112,7 +115,7 @@ class GameViewController: UIViewController, GameiSCorrectDelegate {
             }
         }
         
-        if delegate?.playmode == .some(.timedMode) {
+        if nameGame.delegate?.playmode == .some(.timedMode) {
             view.addSubview(progressCircularView)
             NSLayoutConstraint.activate([
             progressCircularView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
@@ -122,7 +125,7 @@ class GameViewController: UIViewController, GameiSCorrectDelegate {
             progressCircularView.setProgress(to: 1, withAnimation: true) { [weak self] in
                 guard let self = self else { return }
                 if self.isViewLoaded {
-                    self.gameOverAlertView(with: self.scoreCount, self.attempCount)
+                    self.gameOverAlertView(with: self.nameGame.scoreCount, self.nameGame.attemptCount)
                 }
                 self.alertController.removeFromParent()
             }
@@ -132,6 +135,13 @@ class GameViewController: UIViewController, GameiSCorrectDelegate {
 
     
     // MARK: - UI and Contrainsts
+    
+    
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        displayTraitCollection()
+    }
+    
     private func displayTraitCollection(){
         if traitCollection.horizontalSizeClass == .compact && traitCollection.verticalSizeClass == .regular{
             NSLayoutConstraint.deactivate(horizontalConstraints)
@@ -170,11 +180,6 @@ class GameViewController: UIViewController, GameiSCorrectDelegate {
         alertController.addAction(action)
         present(alertController, animated: true)
     }
-    
-    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        super.traitCollectionDidChange(previousTraitCollection)
-        displayTraitCollection()
-    }
 }
 
     
@@ -187,18 +192,14 @@ extension GameViewController:UICollectionViewDelegate, UICollectionViewDataSourc
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as? ProfileCollectionViewCell else { return UICollectionViewCell() }
-        
-        loadImage(for: cell, with: indexPath)
-        
+        viewModel.loadImage(for: cell, with: indexPath)
         return cell
-
     }
 
     func collectionView(_ collectionView: UICollectionView, didHighlightItemAt indexPath: IndexPath) {
         if let profile = viewModel.filteredProfiles?[indexPath.item],
            let cell = collectionView.cellForItem(at: indexPath) as? ProfileCollectionViewCell,
            let name = fullNameLabel.text {
-            cell.delegate = self
             nameGame.playGuess(for: profile, with: name, at: cell) { iscorrect in
                 if iscorrect == false {
                     gameOverAlertView(with: nameGame.scoreCount, nameGame.attemptCount)
@@ -226,91 +227,5 @@ extension GameViewController: UICollectionViewDelegateFlowLayout {
         let totalSpacing = (2 * spacing) + ((numberOfItemsPerRow - 1) * spacing)
         let itemSize = (collectionView.bounds.width - totalSpacing) / numberOfItemsPerRow
         return CGSize(width: itemSize, height: itemSize)
-    }
-}
-
-
-
-//// MARK: - Game Logic
-//extension GameViewController {
-//
-//    private func gamePlayMode(_ profile: Profile?, _ cell: ProfileCollectionViewCell) {
-//        attempCount += 1
-//        guard let profile = profile else { return }
-//        let guessName = "\(profile.firstName) \(profile.lastName)"
-//
-//        switch delegate?.playmode {
-//        case .practiceMode:
-//            if fullNameLabel.text != guessName {
-//                isCorrect = false
-//                cell.profile = profile
-//                gameOverAlertView(with: scoreCount, attempCount)
-//                alertController.removeFromParent()
-//                return
-//            }
-//            scoreCount += 1
-//            isCorrect = true
-//            cell.profile = profile
-//            correctAnswerAlertView()
-//            alertController.removeFromParent()
-//        case .timedMode:
-//            if fullNameLabel.text != guessName {
-//                isCorrect = false
-//                cell.profile = profile
-//                return
-//            }
-//            scoreCount += 1
-//            isCorrect = true
-//            cell.profile = profile
-//            correctAnswerAlertView()
-//            alertController.removeFromParent()
-//        default:
-//            fatalError()
-//        }
-//    }
-//}
-
-
-    //MARK: - Load cell concurrently with cache
-
-extension GameViewController {
-    
-    private func loadImage(for cell: ProfileCollectionViewCell, with indexPath: IndexPath) {
-        guard let profile = viewModel.filteredProfiles?[indexPath.item],
-        let imageString = profile.headshot.url else{ return}
-        let profileId = profile.id
-        
-        if let cacheImage = cache.value(for: profileId) {
-            DispatchQueue.main.async {
-                cell.profileImageView.image = cacheImage
-            }
-        }
-        
-        let fetchOp = FetchImageOperation(imageString: "https:\(imageString)")
-        
-        let cacheOp = BlockOperation { [weak self] in
-            if let image = fetchOp.image {
-                self?.cache.cache(value: image, for: profileId)
-            }
-        }
-        let completOp = BlockOperation { [weak self] in
-            defer {self?.operations.removeValue(forKey: profileId)}
-            
-            if let currentIndexpath = self?.collectionView.indexPath(for: cell),
-               currentIndexpath != indexPath { return }
-            
-            if let image = fetchOp.image {
-                cell.profileImageView.image = image
-            }
-        }
-        cacheOp.addDependency(fetchOp)
-        completOp.addDependency(fetchOp)
-        
-        photoQueue.addOperation(fetchOp)
-        photoQueue.addOperation(cacheOp)
-        
-        OperationQueue.main.addOperation(completOp)
-        operations[profileId] = fetchOp
-        
     }
 }

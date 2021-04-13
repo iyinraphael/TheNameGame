@@ -15,7 +15,7 @@ class NameGame: GameiSCorrectDelegate {
     var isCorrect: Bool = false
     weak var delegate: PlayModeDelegate?
     
-    // MARK: - Method
+    // MARK: - Game logic method
     func playGuess(for profile: Profile, with name: String, at cell: ProfileCollectionViewCell,
                    show alert: (Bool) -> ()) {
         let guessName = "\(profile.firstName) \(profile.lastName)"
@@ -32,6 +32,7 @@ class NameGame: GameiSCorrectDelegate {
             }
             scoreCount += 1
             isCorrect = true
+            cell.profile = profile
             alert(isCorrect)
         case .timedMode:
             if name != guessName {
