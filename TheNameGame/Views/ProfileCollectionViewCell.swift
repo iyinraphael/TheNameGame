@@ -40,8 +40,10 @@ class ProfileCollectionViewCell: UICollectionViewCell {
     }
     override func prepareForReuse() {
         super.prepareForReuse()
-        profileImageView.image = nil
+        strikeLayer.contents = nil
+        strikeLayer.backgroundColor = nil
         strikeLayer.removeFromSuperlayer()
+        profileImageView.image = nil
     }
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
