@@ -26,8 +26,9 @@ class MenuViewController: UIViewController, PlayModeDelegate {
     
     // MARK: - Properties
     var playmode = PlayMode.none
-    let space: CGFloat = 8
-    let radius: CGFloat = 14
+    private let space: CGFloat = 8
+    private let radius: CGFloat = 14
+    private let nameGame = NameGame()
     
     lazy var verticalConstraints: [NSLayoutConstraint] = [
         portraitBackgroundImageView.topAnchor.constraint(equalTo: view.topAnchor),
@@ -189,7 +190,7 @@ class MenuViewController: UIViewController, PlayModeDelegate {
     @objc func playPracticeMode() {
         let vc = GameViewController()
         vc.title = "Pratice Mode"
-        vc.delegate = self
+        vc.nameGame.delegate = self
         playmode = .practiceMode
         navigationController?.pushViewController(vc, animated: true)
     }
@@ -197,7 +198,7 @@ class MenuViewController: UIViewController, PlayModeDelegate {
     @objc func playTimedMode() {
         let vc = GameViewController()
         vc.title = "Timed Mode"
-        vc.delegate = self
+        vc.nameGame.delegate = self
         playmode = .timedMode
         navigationController?.pushViewController(vc, animated: true)
     }

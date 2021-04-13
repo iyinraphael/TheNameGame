@@ -25,6 +25,7 @@ class GameViewController: UIViewController, GameiSCorrectDelegate {
     var isCorrect: Bool = false
     weak var delegate: PlayModeDelegate?
     var value: Double?
+    let nameGame = NameGame()
     private let cache = Cache<String, UIImage>()
     private let photoQueue = OperationQueue()
     private var operations = [String: Operation]()
@@ -128,6 +129,7 @@ class GameViewController: UIViewController, GameiSCorrectDelegate {
         }
         displayTraitCollection()
     }
+
     
     // MARK: - UI and Contrainsts
     private func displayTraitCollection(){
@@ -193,10 +195,16 @@ extension GameViewController:UICollectionViewDelegate, UICollectionViewDataSourc
     }
 
     func collectionView(_ collectionView: UICollectionView, didHighlightItemAt indexPath: IndexPath) {
-        let profile = viewModel.filteredProfiles?[indexPath.item]
-        if let cell = collectionView.cellForItem(at: indexPath) as? ProfileCollectionViewCell {
+        if let profile = viewModel.filteredProfiles?[indexPath.item],
+           let cell = collectionView.cellForItem(at: indexPath) as? ProfileCollectionViewCell,
+           let name = fullNameLabel.text {
             cell.delegate = self
-            gamePlayMode(profile, cell)
+            nameGame.playGuess(for: profile, with: name, at: cell) { iscorrect in
+                if iscorrect == false {
+                    gameOverAlertView(with: nameGame.scoreCount, nameGame.attemptCount)
+                }
+                correctAnswerAlertView()
+            }
         }
     }
 }
@@ -223,43 +231,44 @@ extension GameViewController: UICollectionViewDelegateFlowLayout {
 
 
 
-// MARK: - Game Logic
-extension GameViewController {
-    private func gamePlayMode(_ profile: Profile?, _ cell: ProfileCollectionViewCell) {
-        attempCount += 1
-        guard let profile = profile else { return }
-        let guessName = "\(profile.firstName) \(profile.lastName)"
-        
-        switch delegate?.playmode {
-        case .practiceMode:
-            if fullNameLabel.text != guessName {
-                isCorrect = false
-                cell.profile = profile
-                gameOverAlertView(with: scoreCount, attempCount)
-                alertController.removeFromParent()
-                return
-            }
-            scoreCount += 1
-            isCorrect = true
-            cell.profile = profile
-            correctAnswerAlertView()
-            alertController.removeFromParent()
-        case .timedMode:
-            if fullNameLabel.text != guessName {
-                isCorrect = false
-                cell.profile = profile
-                return
-            }
-            scoreCount += 1
-            isCorrect = true
-            cell.profile = profile
-            correctAnswerAlertView()
-            alertController.removeFromParent()
-        default:
-            fatalError()
-        }
-    }
-}
+//// MARK: - Game Logic
+//extension GameViewController {
+//
+//    private func gamePlayMode(_ profile: Profile?, _ cell: ProfileCollectionViewCell) {
+//        attempCount += 1
+//        guard let profile = profile else { return }
+//        let guessName = "\(profile.firstName) \(profile.lastName)"
+//
+//        switch delegate?.playmode {
+//        case .practiceMode:
+//            if fullNameLabel.text != guessName {
+//                isCorrect = false
+//                cell.profile = profile
+//                gameOverAlertView(with: scoreCount, attempCount)
+//                alertController.removeFromParent()
+//                return
+//            }
+//            scoreCount += 1
+//            isCorrect = true
+//            cell.profile = profile
+//            correctAnswerAlertView()
+//            alertController.removeFromParent()
+//        case .timedMode:
+//            if fullNameLabel.text != guessName {
+//                isCorrect = false
+//                cell.profile = profile
+//                return
+//            }
+//            scoreCount += 1
+//            isCorrect = true
+//            cell.profile = profile
+//            correctAnswerAlertView()
+//            alertController.removeFromParent()
+//        default:
+//            fatalError()
+//        }
+//    }
+//}
 
 
     //MARK: - Load cell concurrently with cache

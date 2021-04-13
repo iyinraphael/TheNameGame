@@ -11,6 +11,7 @@
 		EB5D67DB26029CDF007DD1AC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EB5D67DA26029CDF007DD1AC /* Assets.xcassets */; };
 		EB5D67DE26029CDF007DD1AC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EB5D67DC26029CDF007DD1AC /* LaunchScreen.storyboard */; };
 		EB5D67EF2602CC08007DD1AC /* MenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB5D67EE2602CC08007DD1AC /* MenuViewController.swift */; };
+		EB7D9FE82625F02D00480D0A /* NameGame.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7D9FE72625F02D00480D0A /* NameGame.swift */; };
 		EB91801B2617CA810073B22E /* Cache.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB91801A2617CA810073B22E /* Cache.swift */; };
 		EB91801F2617CAC80073B22E /* ConcorrencyOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB91801E2617CAC80073B22E /* ConcorrencyOperation.swift */; };
 		EB9180222617CAEC0073B22E /* FetchImageOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB9180212617CAEC0073B22E /* FetchImageOperation.swift */; };
@@ -43,6 +44,7 @@
 		EB5D67DD26029CDF007DD1AC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		EB5D67DF26029CDF007DD1AC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		EB5D67EE2602CC08007DD1AC /* MenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuViewController.swift; sourceTree = "<group>"; };
+		EB7D9FE72625F02D00480D0A /* NameGame.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NameGame.swift; sourceTree = "<group>"; };
 		EB91801A2617CA810073B22E /* Cache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cache.swift; sourceTree = "<group>"; };
 		EB91801E2617CAC80073B22E /* ConcorrencyOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConcorrencyOperation.swift; sourceTree = "<group>"; };
 		EB9180212617CAEC0073B22E /* FetchImageOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchImageOperation.swift; sourceTree = "<group>"; };
@@ -180,6 +182,7 @@
 			isa = PBXGroup;
 			children = (
 				EBE79C712602EFB7006A59B4 /* Profile.swift */,
+				EB7D9FE72625F02D00480D0A /* NameGame.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -301,6 +304,7 @@
 				EBE79C822603BE72006A59B4 /* ProfileCollectionViewCell.swift in Sources */,
 				EBE79C722602EFB7006A59B4 /* Profile.swift in Sources */,
 				EB5D67D226029CDC007DD1AC /* AppDelegate.swift in Sources */,
+				EB7D9FE82625F02D00480D0A /* NameGame.swift in Sources */,
 				EB91801B2617CA810073B22E /* Cache.swift in Sources */,
 				EB5D67EF2602CC08007DD1AC /* MenuViewController.swift in Sources */,
 				EBE79C7E26032D91006A59B4 /* GameViewController.swift in Sources */,
