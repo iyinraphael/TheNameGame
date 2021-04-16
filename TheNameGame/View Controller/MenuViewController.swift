@@ -7,15 +7,7 @@
 
 import UIKit
 
-protocol PlayModeDelegate: class {
-    var playmode: PlayMode { get set }
-}
-
-enum PlayMode: String {
-    case none, practiceMode, timedMode
-}
-
-class MenuViewController: UIViewController, PlayModeDelegate {
+class MenuViewController: UIViewController {
 
     // MARK: - Outlets
     private weak var portraitBackgroundImageView: UIImageView!
@@ -25,7 +17,8 @@ class MenuViewController: UIViewController, PlayModeDelegate {
     private weak var instructionLabel: UILabel!
     
     // MARK: - Properties
-    var playmode = PlayMode.none
+    let menuViewModel = MenuViewModel()
+    var gameMode =  GameMode.practiceMode
     private let space: CGFloat = 8
     private let radius: CGFloat = 14
     
@@ -189,18 +182,15 @@ class MenuViewController: UIViewController, PlayModeDelegate {
     @objc func playPracticeMode() {
         let vc = GameViewController()
         vc.title = "Pratice Mode"
-        vc.nameGame.delegate = self
-        playmode = .practiceMode
+        menuViewModel.changeGameMode(to: .practiceMode)
         navigationController?.pushViewController(vc, animated: true)
     }
     
     @objc func playTimedMode() {
         let vc = GameViewController()
         vc.title = "Timed Mode"
-        vc.nameGame.delegate = self
-        playmode = .timedMode
+        menuViewModel.changeGameMode(to: .timeMode)
         navigationController?.pushViewController(vc, animated: true)
     }
-    
 
 }

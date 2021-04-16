@@ -20,12 +20,10 @@ class GameViewController: UIViewController {
     // MARK: - Properties
     private let reuseIdentifier = "cell"
     private var viewModel = GameViewModel()
-    weak var delegate: PlayModeDelegate?
-    var value: Double?
+    private let gameDefault = UserDefaults.standard
+    private let gameDefaultKey = "gameMode"
+    private var value: Double?
     let nameGame = NameGame()
-    private let cache = Cache<String, UIImage>()
-    private let photoQueue = OperationQueue()
-    private var operations = [String: Operation]()
     
     lazy var horizontalConstraints: [NSLayoutConstraint] = [
         fullNameLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 96),
@@ -115,7 +113,7 @@ class GameViewController: UIViewController {
             }
         }
         
-        if nameGame.delegate?.playmode == .some(.timedMode) {
+        if gameDefault.integer(forKey: gameDefaultKey) == GameMode.timeMode.rawValue {
             view.addSubview(progressCircularView)
             NSLayoutConstraint.activate([
             progressCircularView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),

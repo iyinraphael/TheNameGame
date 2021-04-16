@@ -13,7 +13,8 @@ class NameGame: GameiSCorrectDelegate {
     var attemptCount = 0
     var scoreCount = 0
     var isCorrect: Bool = false
-    weak var delegate: PlayModeDelegate?
+    private let gameDefault = UserDefaults.standard
+    private let gameDefaultKey = "gameMode"
     
     // MARK: - Game logic method
     func playGuess(for profile: Profile, with name: String, at cell: ProfileCollectionViewCell,
@@ -22,8 +23,7 @@ class NameGame: GameiSCorrectDelegate {
         cell.delegate = self
         attemptCount += 1
         
-        switch delegate?.playmode {
-        case .practiceMode:
+        if gameDefault.integer(forKey: gameDefaultKey) == GameMode.practiceMode.rawValue {
             if name != guessName {
                 isCorrect = false
                 cell.profile = profile
@@ -34,7 +34,7 @@ class NameGame: GameiSCorrectDelegate {
             isCorrect = true
             cell.profile = profile
             alert(isCorrect)
-        case .timedMode:
+        } else if gameDefault.integer(forKey: gameDefaultKey) == GameMode.timeMode.rawValue {
             if name != guessName {
                 isCorrect = false
                 cell.profile = profile
@@ -44,9 +44,6 @@ class NameGame: GameiSCorrectDelegate {
             isCorrect = true
             cell.profile = profile
             alert(isCorrect)
-        default:
-            fatalError()
         }
-        
     }
 }
